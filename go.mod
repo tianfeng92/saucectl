@@ -6,6 +6,8 @@ replace github.com/Sirupsen/logrus v1.5.0 => github.com/sirupsen/logrus v1.5.0
 
 replace github.com/docker/docker => github.com/docker/engine v17.12.0-ce-rc1.0.20190717161051-705d9623b7c1+incompatible
 
+replace golang.org/x/sys => golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a
+
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/Microsoft/hcsshim v0.8.9 // indirect
