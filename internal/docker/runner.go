@@ -11,9 +11,12 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/saucelabs/saucectl/cli/command"
 	"github.com/saucelabs/saucectl/cli/config"
 	"github.com/saucelabs/saucectl/cli/progress"
+	"github.com/saucelabs/saucectl/cli/utils"
 )
 
 // Runner represents the docker implementation of a test runner.
@@ -100,6 +103,20 @@ func (r *Runner) Setup() error {
 
 	progress.Show("Copying test files to container")
 	if err := r.docker.CopyTestFilesToContainer(r.Ctx, r.containerID, r.Project.Files, r.RunnerConfig.TargetDir); err != nil {
+		return err
+	}
+
+	progress.Show("Creating test configuration")
+	tempFile, err := utils.NewTemporaryFile(config.SUITE_TEMP_PREFIX, config.SUITE_CONFIG_FILENAME)
+	if err != nil {
+		return err
+	}
+	log.Info().Msg(tempFile)
+	if err := config.NewSuitesConfigFile(tempFile, r.Project.Suites); err != nil {
+		return err
+	}
+
+	if err := r.docker.CopyToContainer(r.Ctx, r.containerID, tempFile, r.RunnerConfig.RootDir); err != nil {
 		return err
 	}
 

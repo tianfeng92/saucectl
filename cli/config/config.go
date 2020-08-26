@@ -80,6 +80,16 @@ type RunnerConfiguration struct {
 	ExecCommand []string `yaml:"execCommand"`
 }
 
+const SUITE_TEMP_PREFIX = "suites"
+const SUITE_CONFIG_FILENAME = "suites.yaml"
+func NewSuitesConfigFile(filepath string, suites []Suite) (error) {
+	suiteConfigYAML, err := yaml.Marshal(&suites)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(filepath, suiteConfigYAML, 0644)
+}
+
 func readYaml(cfgFilePath string) ([]byte, error) {
 	if cfgFilePath == "" {
 		return nil, errors.New("no config file was provided")
