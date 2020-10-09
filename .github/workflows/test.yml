@@ -91,11 +91,11 @@ jobs:
           ./saucectl run -c ./.sauce/puppeteer_before_exec.yml --verbose
         env:
           BUILD_ID: ${{ github.run_id }}
-  puppeteer-parallel-1:
+  cypress-parallel-1:
     needs: basic
     runs-on: ubuntu-latest
     container:
-      image: saucelabs/stt-puppeteer-jest-node:v0.1.5
+      image: saucelabs/stt-cypress-mocha-node
       options: --user 1001
 
     steps:
@@ -112,16 +112,17 @@ jobs:
       - name: Run Sauce Pipeline Test
         run: |
           chmod +x ./saucectl
-          ./saucectl run -c ./.sauce/puppeteer_parallel.yml --verbose
+          ./saucectl run -c ./.sauce/cypress_parallel.yml --verbose
         env:
           BUILD_ID: ${{ github.run_id }}
+          BUILD_ENV: Github Actions
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-  puppeteer-parallel-2:
+  cypress-parallel-2:
     needs: basic
     runs-on: ubuntu-latest
     container:
-      image: saucelabs/stt-puppeteer-jest-node:v0.1.5
+      image: saucelabs/stt-cypress-mocha-node
       options: --user 1001
 
     steps:
@@ -138,9 +139,10 @@ jobs:
       - name: Run Sauce Pipeline Test
         run: |
           chmod +x ./saucectl
-          ./saucectl run -c ./.sauce/puppeteer_parallel.yml --verbose
+          ./saucectl run -c ./.sauce/cypress_parallel.yml --verbose
         env:
           BUILD_ID: ${{ github.run_id }}
+          BUILD_ENV: Github Actions
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
   playwright:
